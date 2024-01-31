@@ -1,6 +1,6 @@
 import axiosUtil from "../utils/axiosUtil";
 
-const { createContext, useState } = require("react");
+const { createContext, useState, useCallback } = require("react");
 const bookEndPoint = "http://localhost:3001";
 
 const BooksContext = createContext();
@@ -8,7 +8,7 @@ const BooksContext = createContext();
 const Provider = ({ children }) => {
   const [books, setBooks] = useState([]);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     const response = await axiosUtil(
       `${bookEndPoint}/books`,
       "GET",
@@ -17,7 +17,7 @@ const Provider = ({ children }) => {
       {}
     );
     setBooks(response);
-  };
+  }, []);
 
   const editBookById = async (id, newTitle) => {
     await axiosUtil(
